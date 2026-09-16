@@ -1,116 +1,346 @@
+/* ================================================================
+   Открытка — оформление
+   Цвета собраны в одном месте: поменяй их здесь, и поменяется всё.
+   ================================================================ */
+
+:root {
+  --cream:      #FFF7EF;
+  --paper:      #FFFDFA;
+  --ink:        #4A3B33;
+  --ink-soft:   #8A776B;
+  --rose:       #E4748C;
+  --rose-soft:  #FBE7EC;
+  --sea:        #6E93A8;
+  --sea-soft:   #E6F1F6;
+  --line:       #EFE1D4;
+  --shadow:     0 10px 30px rgba(120, 90, 70, .10);
+
+  /* Рукописный шрифт. Caveat грузится из интернета и поддерживает кириллицу.
+     Дальше запасные варианты — на случай, если интернет медленный. */
+  --hand-font: 'Bad Script', 'Comic Sans MS', 'Segoe Print', cursive, Georgia, serif;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5;
-  font-family: 'Merriweather', serif;
+  background:
+    radial-gradient(circle at 12% 8%,  var(--rose-soft) 0%, transparent 42%),
+    radial-gradient(circle at 88% 22%, var(--sea-soft)  0%, transparent 40%),
+    radial-gradient(circle at 50% 100%, #FDF0E3 0%, transparent 55%),
+    var(--cream);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--hand-font);   /* рукописный шрифт на всей странице */
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-.card-container {
-  width: 500px;
-  height: 320px;
-  perspective: 1000px;
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 20px 64px;
 }
 
-.card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  border-radius: 8px;
+/* ---------------------------------------------------------- верх */
+
+.hero {
+  text-align: center;
+  padding: 48px 0 8px;
 }
 
-.card-container:hover .card {
-  transform: rotateY(180deg);
+.hero__art { max-width: 460px; margin: 0 auto; }
+.hero__art svg { width: 100%; height: auto; display: block; }
+
+.hero h1 {
+  font-family: var(--hand-font);
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--rose);
+  margin: 4px 0 10px;
 }
 
-.card-side {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
+.subtitle {
+  font-size: 1.35rem;
+  color: var(--ink-soft);
+  max-width: 34ch;
+  margin: 0 auto;
 }
 
-/* Front Side */
-.front img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
+/* ------------------------------------------------- блоки с текстом */
 
-.front-title {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: white;
-  font-size: 2.2rem;
-  font-family: 'Caveat', cursive;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-}
-
-/* Back Side */
-.back {
-  transform: rotateY(180deg);
-  display: grid;
-  grid-template-columns: 1fr 2px 1fr;
-  padding: 25px;
-  background-color: #fffdf9;
-  border: 1px solid #e0dcd3;
-}
-
-.divider { 
-  background-color: #e0dcd3; 
-  height: 100%; 
-}
-
-.message { 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  font-size: 0.9rem; 
-  color: #333; 
-  line-height: 1.5; 
-}
-
-.signature { 
-  font-family: 'Caveat', cursive;
-  font-size: 1.4rem;
-  margin-top: 10px; 
-}
-
-.stamp-section { 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  align-items: flex-end; 
-}
-
-.stamp {
-  width: 50px;
-  height: 60px;
-  border: 2px dashed #b5b5b5;
+.block {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  color: #888;
-  letter-spacing: 1px;
+  gap: 28px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 30px 36px;
+  margin-top: 46px;
+  box-shadow: var(--shadow);
 }
 
-.address { 
-  width: 100%; 
-  font-size: 0.8rem; 
-  color: #555; 
-  text-align: left; 
-  padding-left: 15px; 
+.block--flip { flex-direction: row-reverse; }
+
+.block__art { flex: 0 0 42%; }
+.block__art svg { width: 100%; height: auto; display: block; }
+
+.block__text { flex: 1; }
+
+.tag {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--sea);
+  margin-bottom: 6px;
+  opacity: .9;
+}
+
+.block--flip .tag { color: var(--rose); }
+
+.hand {
+  font-family: var(--hand-font);
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
   line-height: 1.4;
+  color: var(--ink);
+}
+
+/* --------------------------------------------------- три кружка */
+
+.stickers { margin-top: 54px; text-align: center; }
+
+.stickers h2 {
+  font-family: var(--hand-font);
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  color: var(--sea);
+  margin-bottom: 22px;
+}
+
+.stickers__row {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.sticker {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px 14px 16px;
+  width: 190px;
+  box-shadow: var(--shadow);
+  transition: transform .35s cubic-bezier(.2,.9,.3,1.3);
+}
+
+.sticker:nth-child(1) { transform: rotate(-2.2deg); }
+.sticker:nth-child(3) { transform: rotate(2.2deg); }
+.sticker:hover { transform: rotate(0deg) translateY(-6px); }
+
+.sticker__art {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.sticker__art svg { width: 100%; height: 100%; display: block; }
+
+/* Фотография ложится поверх рисунка. Нет файла — остаётся рисунок. */
+.sticker__art img {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+}
+
+.sticker figcaption {
+  font-family: var(--hand-font);
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-top: 6px;
+}
+
+/* ------------------------------------------------------- письмо */
+
+.letter {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 44px 36px 34px;
+  margin-top: 54px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+/* маленькая «кнопка», как будто листок приколот */
+.letter__pin {
+  position: absolute;
+  top: -11px; left: 50%;
+  width: 22px; height: 22px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: var(--rose);
+  box-shadow: 0 3px 8px rgba(228, 116, 140, .45), inset 0 -3px 5px rgba(0,0,0,.12);
+}
+
+.letter h2 {
+  font-family: var(--hand-font);
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  color: var(--rose);
+  margin-bottom: 14px;
+}
+
+.letter p {
+  max-width: 54ch;
+  margin: 0 auto;
+  color: var(--ink);
+  font-size: 1.28rem;
+}
+
+.signature {
+  font-family: var(--hand-font);
+  font-size: 1.7rem !important;
+  color: var(--rose);
+  margin-top: 20px !important;
+}
+
+/* -------------------------------------------------------- низ */
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--ink-soft);
+  font-size: 1.15rem;
+}
+
+/* ------------------------------------------------- анимации */
+
+.sealion   { animation: sway 5.5s ease-in-out infinite; transform-origin: 110px 180px; }
+.cat       { animation: sway 6.5s ease-in-out infinite reverse; transform-origin: 318px 180px; }
+.bounce-heart { animation: pop 2.6s ease-in-out infinite; transform-origin: 35px 55px; }
+
+.hearts .h1 { animation: float 4.2s ease-in-out infinite; }
+.hearts .h2 { animation: float 5.1s ease-in-out .5s infinite; }
+.hearts .h3 { animation: float 4.7s ease-in-out .9s infinite; }
+.zzz        { animation: float 3.6s ease-in-out infinite; }
+
+@keyframes sway  { 0%,100% { transform: rotate(-1.1deg); } 50% { transform: rotate(1.1deg); } }
+@keyframes float { 0%,100% { transform: translateY(0);    opacity: .95; }
+                   50%     { transform: translateY(-9px); opacity: 1; } }
+@keyframes pop   { 0%,100% { transform: scale(1); } 50% { transform: scale(1.14); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* -------------------------------------------------- телефон */
+
+@media (max-width: 680px) {
+  .page { padding: 0 16px 48px; }
+  .block, .block--flip {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+    padding: 22px 20px;
+  }
+  .block__art { flex: none; width: 74%; max-width: 260px; }
+  .photo { flex: none; width: 100%; margin-top: 0; }
+  .divider { max-width: 180px; }
+  .sticker { width: 100%; max-width: 280px; transform: none; }
+  .letter { padding: 40px 22px 30px; }
+}
+
+
+/* ============================ ФОТОГРАФИИ ============================ */
+
+.photo {
+  position: relative;
+  flex: 0 0 50%;
+  margin-top: 24px;   /* НАСКОЛЬКО ФОТО ОПУЩЕНО. Больше число — ниже. */
+  aspect-ratio: 1 / 1;   /* квадрат. 4 / 3 — шире, 4 / 5 — выше */
+  border-radius: 18px;
+  overflow: hidden;
+  background: #F4EBE2;
+  box-shadow: inset 0 0 0 2px #E7D7C7;
+}
+
+/* Подсказка видна, пока файла с фотографией нет. */
+.photo__hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: #A8927E;
+  padding: 10px;
+}
+.photo__hint b { font-weight: 700; color: #8A725C; }
+
+.photo img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* КАКУЮ ЧАСТЬ ФОТО ВИДНО.
+     Рамка широкая, фото обычно выше — лишнее обрезается.
+     0%  = виден самый верх (головы точно не срежет)
+     50% = середина (так было раньше, головы срезало)
+     100% = виден низ
+     Поменяй число, если на какой-то фотографии обрезано не то. */
+  object-position: center 10%;
+  display: block;
+}
+
+/* ====================== РИСУНКИ МЕЖДУ БЛОКАМИ ====================== */
+
+.divider {
+  max-width: 230px;
+  margin: 34px auto 26px;
+}
+.divider svg { width: 100%; height: auto; display: block; }
+
+.footer__art { max-width: 260px; margin: 0 auto 4px; }
+.footer__art svg { width: 100%; height: auto; display: block; }
+
+
+/* ================= ПОДПИСЬ, ВСПЛЫВАЮЩАЯ НА ФОТО ================= */
+
+.photo__caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 2;
+  padding: 30px 16px 14px;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 6px rgba(0,0,0,.5);
+  background: linear-gradient(transparent, rgba(0,0,0,.62));
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+
+/* пустую подпись не показываем вообще */
+.photo__caption:empty { display: none; }
+
+.photo:hover .photo__caption { opacity: 1; }
+
+/* на телефоне наведения нет — показываем всегда */
+@media (hover: none) {
+  .photo__caption { opacity: 1; }
 }

@@ -1,41 +1,429 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Цифровая Открытка</title>
-  <link rel="stylesheet" href="styles.css">
-  <!-- Google Fonts for Cyrillic support -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Открытка 💙</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script>
+/* Ищем фотографию, перебирая расширения: сначала .jpeg, потом .jpg, .png и так далее.
+   Поэтому не важно, как именно называется твой файл — лишь бы имя было 1, 2, 3...
+   Если ни одного варианта нет, показываем серую рамку с подсказкой.
+   Этот скрипт должен стоять ЗДЕСЬ, в <head>: картинки грузятся раньше конца
+   страницы, и внизу он бы просто не успел заработать. */
+var EXTS = ['jpeg', 'jpg', 'png', 'webp', 'JPEG', 'JPG', 'PNG'];
+function nextExt(img) {
+  var i = parseInt(img.getAttribute('data-step'), 10) + 1;
+  if (i < EXTS.length) {
+    img.setAttribute('data-step', i);
+    img.src = 'photos/' + img.getAttribute('data-n') + '.' + EXTS[i];
+  } else {
+    img.style.display = 'none';
+  }
+}
+
+/* ---------- СЧЁТЧИК ДНЕЙ ВМЕСТЕ ----------
+   Дата начала. Месяцы считаются С НУЛЯ: 0=январь, 4=май, 11=декабрь.
+   Ниже стоит 9 мая 2026 — поменяй, если дата другая. */
+var START = new Date(2026, 4, 9);
+
+function plural(n, one, few, many) {
+  var a = n % 10, b = n % 100;
+  if (a === 1 && b !== 11) return one;
+  if (a >= 2 && a <= 4 && (b < 10 || b >= 20)) return few;
+  return many;
+}
+function together() {
+  var now = new Date();
+  var months = (now.getFullYear() - START.getFullYear()) * 12
+             + (now.getMonth() - START.getMonth());
+  var days = now.getDate() - START.getDate();
+  if (days < 0) {
+    months -= 1;
+    days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+  }
+  var parts = [];
+  if (months > 0) parts.push(months + ' ' + plural(months, 'месяц', 'месяца', 'месяцев'));
+  if (days > 0 || months <= 0) parts.push(days + ' ' + plural(days, 'день', 'дня', 'дней'));
+  return parts.join(' и ');
+}
+document.addEventListener('DOMContentLoaded', function () {
+  var el = document.getElementById('together');
+  if (el) el.textContent = together();
+});
+</script>
 </head>
 <body>
-  <div class="card-container">
-    <div class="card">
-      <!-- Front Side -->
-      <div class="card-side front">
-        <img src="https://picsum.photos/600/400" alt="Обложка открытки">
-        <div class="front-title">Привет!</div>
-      </div>
-      <!-- Back Side -->
-      <div class="card-side back">
-        <div class="message">
-          <p>Дорогой друг,</p>
-          <p>Надеюсь, у тебя отличный день! Посылаю самые тёплые пожелания.</p>
-          <p class="signature">— Ульсезим</p>
-        </div>
-        <div class="divider"></div>
-        <div class="stamp-section">
-          <div class="stamp">МАРКА</div>
-          <div class="address">
-            <p>Кому: Моему лучшему другу</p>
-            <p>ул. Интернета, д. 101</p>
-            <p>Сеть, 010000</p>
-          </div>
-        </div>
-      </div>
+
+<!--
+  ================================================================
+  КАК РЕДАКТИРОВАТЬ ЭТУ СТРАНИЧКУ
+
+  1. ТЕКСТ. Места, которые можно менять, помечены
+     комментарием ЗАМЕНИ прямо над строчкой.
+
+  2. ФОТОГРАФИИ. Положи свои файлы в папку photos/ рядом с этим
+     файлом и назови их просто 1, 2, 3, 4, 5, 6 — расширение любое:
+     .jpeg .jpg .png .webp (и заглавными буквами тоже подойдёт).
+     Страница сама найдёт нужный файл.
+     Пока файла нет — на его месте видна серая рамка с подсказкой.
+
+  3. Рисунки котиков и морских львов нарисованы кодом — их трогать
+     не нужно, они не сломаются.
+  ================================================================
+-->
+
+<div class="page">
+
+  <!-- ======================= ВЕРХ ======================= -->
+  <header class="hero">
+    <div class="hero__art">
+      <svg viewBox="0 0 400 210" role="img" aria-label="Котик и морской лев">
+        <ellipse cx="200" cy="192" rx="150" ry="12" fill="#EADBCB" opacity=".55"/>
+        <g class="sealion">
+          <path d="M112 186c-26 0-44-13-46-36-3-30 9-58 30-70 8-5 18-7 26-5 20 4 32 22 38 44 5 19 14 33 27 41 7 5 15 8 23 9-6 7-17 10-30 9-11-1-21-5-29-11-9 12-24 19-39 19z" fill="#B98C6E"/>
+          <path d="M104 178c-16-1-26-10-27-25-1-19 7-36 20-42 11-5 21 1 26 15 5 15 3 33-5 43-4 6-9 9-14 9z" fill="#E3C3A4"/>
+          <circle cx="104" cy="96" r="35" fill="#C79A79"/>
+          <ellipse cx="78" cy="108" rx="21" ry="16" fill="#E3C3A4"/>
+          <ellipse cx="62" cy="103" rx="7.5" ry="6" fill="#4A342A"/>
+          <path d="M60 111c3 4 8 5 12 3" fill="none" stroke="#4A342A" stroke-width="2.4" stroke-linecap="round"/>
+          <g stroke="#8A6A55" stroke-width="1.6" stroke-linecap="round" opacity=".8">
+            <path d="M64 114l-16 7"/><path d="M66 117l-14 11"/><path d="M70 119l-9 13"/>
+          </g>
+          <circle cx="90" cy="84" r="6.5" fill="#3B2A22"/>
+          <circle cx="116" cy="86" r="6.5" fill="#3B2A22"/>
+          <circle cx="92" cy="81.5" r="2.4" fill="#fff"/>
+          <circle cx="118" cy="83.5" r="2.4" fill="#fff"/>
+          <path d="M128 70c6-4 13-3 17 2" fill="none" stroke="#9A7357" stroke-width="3" stroke-linecap="round"/>
+          <path d="M178 176c14-6 26-5 34 2-9 7-22 9-34 5z" fill="#B98C6E"/>
+          <path d="M186 158c13-9 26-11 35-5-7 10-20 16-33 14z" fill="#C79A79"/>
+          <path d="M128 182c-10 6-22 7-30 2 6-9 18-13 28-10z" fill="#A87E62"/>
+        </g>
+        <g class="cat">
+          <path d="M296 108c-5-14-3-26 2-28 6-2 13 6 17 19z" fill="#EFA76B"/>
+          <path d="M340 106c8-12 17-18 22-15 5 4 3 15-4 26z" fill="#EFA76B"/>
+          <path d="M301 104c-3-8-2-14 1-15 3-1 7 4 9 11z" fill="#F6C9AE"/>
+          <path d="M337 103c5-7 10-11 13-9 3 2 2 8-3 15z" fill="#F6C9AE"/>
+          <path d="M318 186c-30 0-48-16-48-42 0-27 20-46 48-46s48 19 48 46c0 26-18 42-48 42z" fill="#EFA76B"/>
+          <path d="M318 186c-16 0-27-9-27-24 0-16 11-27 27-27s27 11 27 27c0 15-11 24-27 24z" fill="#FBE0CB"/>
+          <circle cx="318" cy="94" r="38" fill="#EFA76B"/>
+          <ellipse cx="318" cy="105" rx="17" ry="13" fill="#FBE0CB"/>
+          <ellipse cx="303" cy="88" rx="5.5" ry="6.5" fill="#3B2A22"/>
+          <ellipse cx="333" cy="88" rx="5.5" ry="6.5" fill="#3B2A22"/>
+          <circle cx="305" cy="85.5" r="2.2" fill="#fff"/>
+          <circle cx="335" cy="85.5" r="2.2" fill="#fff"/>
+          <path d="M318 99l-5 4 5 3 5-3z" fill="#E77D8E"/>
+          <path d="M318 106c-3 4-8 4-11 1M318 106c3 4 8 4 11 1" fill="none" stroke="#B5765A" stroke-width="2.2" stroke-linecap="round"/>
+          <g stroke="#D79A72" stroke-width="1.8" stroke-linecap="round">
+            <path d="M300 103l-19-4"/><path d="M300 108l-18 6"/>
+            <path d="M336 103l19-4"/><path d="M336 108l18 6"/>
+          </g>
+          <path d="M366 168c18-4 30-18 28-34-1-11-9-16-16-12-8 4-9 16-2 22" fill="none" stroke="#EFA76B" stroke-width="13" stroke-linecap="round"/>
+          <ellipse cx="300" cy="184" rx="11" ry="7" fill="#FBE0CB"/>
+          <ellipse cx="336" cy="184" rx="11" ry="7" fill="#FBE0CB"/>
+        </g>
+        <g class="hearts">
+          <path class="h1" d="M214 60c0-7 10-10 13-3 3-7 13-4 13 3 0 8-13 16-13 16s-13-8-13-16z" fill="#F08CA0"/>
+          <path class="h2" d="M244 30c0-5 7-7 9-2 2-5 9-3 9 2 0 6-9 11-9 11s-9-5-9-11z" fill="#F7B3C1"/>
+          <path class="h3" d="M196 28c0-4 6-6 8-2 2-4 8-2 8 2 0 5-8 10-8 10s-8-5-8-10z" fill="#FAD0D9"/>
+        </g>
+      </svg>
     </div>
-  </div>
+
+    <!-- ЗАМЕНИ: главный заголовок -->
+    <h1>Привет, Женя!</h1>
+    <!-- ЗАМЕНИ: строчка под заголовком -->
+    <p class="subtitle">Мы с тобой уже <span id="together"></span> вместе 🦭💙</p>
+  </header>
+
+  <main>
+
+    <!-- ===================== ФОТО 1 ===================== -->
+    <section class="block">
+      <div class="photo">
+        <span class="photo__hint">фото №1<br>файл <b>photos/1</b></span>
+        <img src="photos/1.jpeg" alt="" data-n="1" data-step="0" onerror="nextExt(this)" style="object-position: center 30%">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">ну какая булочка!!!</span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ: маленькая подпись сверху -->
+        <span class="tag"> Фото, где ты смотришь на себя в другом воплощении</span>
+        <!-- ЗАМЕНИ: предложение рядом с фото -->
+        <p class="hand">Ты такой же милый, как морские котики 😽</p>
+      </div>
+    </section>
+
+    <!-- ===================== ФОТО 2 ===================== -->
+    <section class="block block--flip">
+      <div class="photo">
+        <span class="photo__hint">фото №2<br>файл <b>photos/2</b></span>
+        <img src="photos/2.jpeg" alt="" data-n="2" data-step="0" onerror="nextExt(this)">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">то самое первое свидание в баре .. </span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ -->
+        <span class="tag">Проводить вечера с тобой этим летом было очень волшебно</span>
+        <!-- ЗАМЕНИ -->
+        <p class="hand">Спасибо за каждое свидание 💙</p>
+      </div>
+    </section>
+
+    <!-- ~~~~~~~~~ РИСУНОК: морской лев с сердечком ~~~~~~~~~ -->
+    <div class="divider">
+      <svg viewBox="0 0 220 180" role="img" aria-label="Морской лев с сердечком">
+        <ellipse cx="110" cy="164" rx="80" ry="10" fill="#D8E9F0"/>
+        <path d="M70 166c-20 0-34-11-35-29-2-24 8-46 24-55 14-8 28 0 34 19 5 16 15 41 38 55-10 8-27 9-40 3-6 5-14 7-21 7z" fill="#8FA6B4"/>
+        <path d="M66 160c-12-1-19-8-20-20-1-15 5-28 15-32 8-4 15 2 19 12 4 12 2 26-4 34-3 4-6 6-10 6z" fill="#C3D3DC"/>
+        <circle cx="72" cy="74" r="30" fill="#9CB2BF"/>
+        <ellipse cx="50" cy="85" rx="18" ry="14" fill="#C3D3DC"/>
+        <ellipse cx="36" cy="80" rx="6.5" ry="5.2" fill="#3F4F58"/>
+        <path d="M34 88c3 3 7 4 10 2" fill="none" stroke="#3F4F58" stroke-width="2.2" stroke-linecap="round"/>
+        <g stroke="#6E8492" stroke-width="1.5" stroke-linecap="round" opacity=".85">
+          <path d="M38 91l-14 6"/><path d="M40 94l-12 9"/><path d="M43 96l-8 11"/>
+        </g>
+        <circle cx="60" cy="63" r="5.5" fill="#2E3B43"/>
+        <circle cx="83" cy="65" r="5.5" fill="#2E3B43"/>
+        <circle cx="61.8" cy="61" r="2" fill="#fff"/>
+        <circle cx="84.8" cy="63" r="2" fill="#fff"/>
+        <path d="M95 50c5-3 11-2 14 2" fill="none" stroke="#7C93A1" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M146 158c12-5 22-4 29 2-8 6-19 7-29 4z" fill="#8FA6B4"/>
+        <path d="M152 142c11-8 22-9 30-4-6 8-17 13-28 12z" fill="#9CB2BF"/>
+        <path class="bounce-heart" d="M18 44c0-9 13-13 17-4 4-9 17-5 17 4 0 10-17 21-17 21S18 54 18 44z" fill="#F08CA0"/>
+      </svg>
+    </div>
+
+    <!-- ===================== ФОТО 3 ===================== -->
+    <section class="block">
+      <div class="photo">
+        <span class="photo__hint">фото №3<br>файл <b>photos/3</b></span>
+        <img src="photos/3.jpeg" alt="" data-n="3" data-step="0" onerror="nextExt(this)" style="object-position: center 30%">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">ты выглядишь очень круто когда чалишь</span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ -->
+        <span class="tag">Спасибо, что мотивируешь меня быть лучше</span>
+        <!-- ЗАМЕНИ -->
+        <p class="hand">Твоя трудолюбивость вдохновляет меня работать усерднее🦾 Не забывай отдыхать!</p>
+      </div>
+    </section>
+
+    <!-- ===================== ФОТО 4 ===================== -->
+    <section class="block block--flip">
+      <div class="photo">
+        <span class="photo__hint">фото №4<br>файл <b>photos/4</b></span>
+        <img src="photos/4.jpeg" alt="" data-n="4" data-step="0" onerror="nextExt(this)">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">у тебя смешные шорты для плавания</span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ -->
+        <span class="tag">ХиХи 🏊‍♀️🏊‍♂️</span>
+        <!-- ЗАМЕНИ -->
+        <p class="hand">Спасибо, что мы можем быть несеръезными вместе</p>
+      </div>
+    </section>
+
+    <!-- ~~~~~~~~~ РИСУНОК: спящий котик ~~~~~~~~~ -->
+    <div class="divider">
+      <svg viewBox="0 0 220 180" role="img" aria-label="Спящий котик">
+        <ellipse cx="110" cy="150" rx="82" ry="11" fill="#F6E2D2"/>
+        <path d="M110 150c-38 0-62-16-62-38 0-20 22-34 56-34 38 0 64 13 64 34 0 22-22 38-58 38z" fill="#A9A29C"/>
+        <path d="M120 150c-22 0-36-9-36-21 0-11 12-19 31-19 21 0 35 7 35 19 0 12-12 21-30 21z" fill="#DED7D0"/>
+        <circle cx="62" cy="96" r="30" fill="#A9A29C"/>
+        <path d="M42 78c-4-11-3-20 1-21 4-2 10 4 13 14z" fill="#A9A29C"/>
+        <path d="M78 74c5-9 11-14 15-11 3 3 2 12-3 20z" fill="#A9A29C"/>
+        <path d="M46 78c-2-6-2-11 0-11 2-1 5 3 7 8z" fill="#EBC7C7"/>
+        <path d="M77 74c3-5 7-9 9-7 2 1 1 6-2 11z" fill="#EBC7C7"/>
+        <ellipse cx="62" cy="104" rx="14" ry="11" fill="#DED7D0"/>
+        <path d="M48 93c3-3 8-3 11 0M65 93c3-3 8-3 11 0" fill="none" stroke="#3B342F" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M62 100l-4 3 4 2 4-2z" fill="#E77D8E"/>
+        <path d="M62 105c-2 3-6 3-8 1M62 105c2 3 6 3 8 1" fill="none" stroke="#7E736B" stroke-width="2" stroke-linecap="round"/>
+        <g stroke="#C6BDB5" stroke-width="1.6" stroke-linecap="round">
+          <path d="M47 102l-16-4"/><path d="M47 107l-15 5"/>
+          <path d="M77 102l16-4"/><path d="M77 107l15 5"/>
+        </g>
+        <path d="M172 112c14 2 22 10 20 20-2 8-12 11-19 6" fill="none" stroke="#A9A29C" stroke-width="12" stroke-linecap="round"/>
+        <g class="zzz" fill="#B9A7C9" font-family="Nunito, sans-serif" font-weight="700">
+          <text x="92" y="52" font-size="15">z</text>
+          <text x="106" y="38" font-size="19">z</text>
+          <text x="124" y="22" font-size="23">z</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- ===================== ФОТО 5 ===================== -->
+    <section class="block">
+      <div class="photo">
+        <span class="photo__hint">фото №5<br>файл <b>photos/5</b></span>
+        <img src="photos/5.jpeg" alt="" data-n="5" data-step="0" onerror="nextExt(this)" style="object-position: center 30%">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">надеюсь наши лифты всегда будут медленными</span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ -->
+        <span class="tag">Те самые поездки в лифте 😼</span>
+        <!-- ЗАМЕНИ -->
+        <p class="hand">Очень люблю делать фото с тобой в лифте! Ну и кататься в них 😚</p>
+      </div>
+    </section>
+
+    <!-- ===================== ФОТО 6 ===================== -->
+    <section class="block block--flip">
+      <div class="photo">
+        <span class="photo__hint">фото №6<br>файл <b>photos/6</b></span>
+        <img src="photos/6.jpeg" alt="" data-n="6" data-step="0" onerror="nextExt(this)">
+        <!-- ЗАМЕНИ: подпись, всплывает при наведении. Оставь пустым — её не будет. -->
+        <span class="photo__caption">Мне было так важно чтобы ты пришел.. И ты пришел!</span>
+      </div>
+      <div class="block__text">
+        <!-- ЗАМЕНИ -->
+        <span class="tag">Надеюсь, нас ждет много core memories вместе</span>
+        <!-- ЗАМЕНИ -->
+        <p class="hand">Спасибо за каждый важный день, который ты со мной разделил</p>
+      </div>
+    </section>
+
+    <!-- ===================== ТРИ КРУЖКА ===================== -->
+    <section class="stickers">
+      <!-- ЗАМЕНИ: заголовок этой части -->
+      <h2>To my fav boy in the world💗 Я очень люблю..</h2>
+      <div class="stickers__row">
+
+        <figure class="sticker">
+          <div class="sticker__art">
+            <img src="photos/7.jpeg" alt="" data-n="7" data-step="0" onerror="nextExt(this)">
+            <svg viewBox="0 0 120 120" role="img" aria-label="Котик">
+              <circle cx="60" cy="60" r="52" fill="#FDEFE2"/>
+              <path d="M36 42c-4-12-3-21 1-22 5-2 11 5 14 16z" fill="#EFA76B"/>
+              <path d="M84 40c5-10 12-16 16-13 4 3 3 13-3 22z" fill="#EFA76B"/>
+              <circle cx="60" cy="62" r="34" fill="#EFA76B"/>
+              <ellipse cx="60" cy="72" rx="15" ry="12" fill="#FBE0CB"/>
+              <ellipse cx="47" cy="57" rx="5" ry="6" fill="#3B2A22"/>
+              <ellipse cx="73" cy="57" rx="5" ry="6" fill="#3B2A22"/>
+              <circle cx="48.6" cy="54.6" r="2" fill="#fff"/>
+              <circle cx="74.6" cy="54.6" r="2" fill="#fff"/>
+              <path d="M60 67l-4 3 4 3 4-3z" fill="#E77D8E"/>
+              <path d="M60 73c-3 3-7 3-9 1M60 73c3 3 7 3 9 1" fill="none" stroke="#B5765A" stroke-width="2" stroke-linecap="round"/>
+              <g stroke="#D79A72" stroke-width="1.7" stroke-linecap="round">
+                <path d="M44 70l-16-3"/><path d="M44 75l-15 5"/>
+                <path d="M76 70l16-3"/><path d="M76 75l15 5"/>
+              </g>
+            </svg>
+          </div>
+          <!-- ЗАМЕНИ: подпись -->
+          <figcaption>твою улыбку</figcaption>
+        </figure>
+
+        <figure class="sticker">
+          <div class="sticker__art">
+            <img src="photos/8.jpeg" alt="" data-n="8" data-step="0" onerror="nextExt(this)">
+            <svg viewBox="0 0 120 120" role="img" aria-label="Морской лев">
+              <circle cx="60" cy="60" r="52" fill="#E6F1F6"/>
+              <circle cx="64" cy="58" r="33" fill="#9CB2BF"/>
+              <ellipse cx="42" cy="72" rx="19" ry="15" fill="#C3D3DC"/>
+              <ellipse cx="28" cy="67" rx="6.5" ry="5.2" fill="#3F4F58"/>
+              <path d="M26 75c3 3 8 4 11 2" fill="none" stroke="#3F4F58" stroke-width="2.2" stroke-linecap="round"/>
+              <g stroke="#6E8492" stroke-width="1.5" stroke-linecap="round" opacity=".85">
+                <path d="M31 79l-14 6"/><path d="M34 83l-12 9"/>
+              </g>
+              <circle cx="53" cy="47" r="5.6" fill="#2E3B43"/>
+              <circle cx="76" cy="49" r="5.6" fill="#2E3B43"/>
+              <circle cx="54.9" cy="44.8" r="2" fill="#fff"/>
+              <circle cx="77.9" cy="46.8" r="2" fill="#fff"/>
+              <path d="M88 34c5-3 11-2 14 2" fill="none" stroke="#7C93A1" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M74 92c10-4 19-3 25 2-7 5-17 6-25 3z" fill="#8FA6B4"/>
+            </svg>
+          </div>
+          <!-- ЗАМЕНИ: подпись -->
+          <figcaption>твои смешные выражения лица</figcaption>
+        </figure>
+
+        <figure class="sticker">
+          <div class="sticker__art">
+            <img src="photos/9.jpeg" alt="" data-n="9" data-step="0" onerror="nextExt(this)">
+            <svg viewBox="0 0 120 120" role="img" aria-label="Котик и морской лев вместе">
+              <circle cx="60" cy="60" r="52" fill="#FBE7EC"/>
+              <path d="M60 40c0-11 16-16 21-5 5-11 21-6 21 5 0 13-21 27-21 27S60 53 60 40z" fill="#F08CA0" opacity=".28"/>
+              <circle cx="44" cy="66" r="25" fill="#EFA76B"/>
+              <path d="M28 51c-3-9-2-15 1-16 3-1 8 4 10 12z" fill="#EFA76B"/>
+              <path d="M60 50c4-8 9-12 12-10 3 2 2 10-2 16z" fill="#EFA76B"/>
+              <ellipse cx="44" cy="73" rx="11" ry="9" fill="#FBE0CB"/>
+              <ellipse cx="35" cy="62" rx="3.8" ry="4.6" fill="#3B2A22"/>
+              <ellipse cx="53" cy="62" rx="3.8" ry="4.6" fill="#3B2A22"/>
+              <path d="M44 69l-3 2 3 2 3-2z" fill="#E77D8E"/>
+              <circle cx="82" cy="70" r="24" fill="#9CB2BF"/>
+              <ellipse cx="96" cy="80" rx="14" ry="11" fill="#C3D3DC"/>
+              <ellipse cx="106" cy="76" rx="5" ry="4" fill="#3F4F58"/>
+              <circle cx="75" cy="62" r="4.4" fill="#2E3B43"/>
+              <circle cx="90" cy="63" r="4.4" fill="#2E3B43"/>
+              <circle cx="76.4" cy="60.4" r="1.6" fill="#fff"/>
+              <circle cx="91.4" cy="61.4" r="1.6" fill="#fff"/>
+            </svg>
+          </div>
+          <!-- ЗАМЕНИ: подпись -->
+          <figcaption>твою любознательность</figcaption>
+        </figure>
+
+      </div>
+    </section>
+
+    <!-- ===================== ПИСЬМО ===================== -->
+    <section class="letter">
+      <div class="letter__pin"></div>
+      <!-- ЗАМЕНИ: заголовок письма -->
+      <h2>Любимому котику</h2>
+      <!-- ЗАМЕНИ: само письмо -->
+      <p>Котик, я тебя очень люблю! Спасибо за все то время, которое мы провели вместе. Ты один из самых теплых, добрых, и искренних людей, которых я знаю. Давай не отлипать друг от друга хаха!</p>
+      <!-- ЗАМЕНИ: подпись -->
+      <p class="signature">— Сезя</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer__art">
+      <svg viewBox="0 0 240 90" role="img" aria-label="Котик и морской лев машут">
+        <ellipse cx="120" cy="82" rx="86" ry="6" fill="#EADBCB" opacity=".5"/>
+        <g class="sealion">
+          <path d="M72 80c-14 0-24-7-25-19-2-16 5-31 16-37 5-3 10-4 14-2 11 2 17 11 21 23 3 10 8 18 15 22 4 3 8 4 12 5-3 4-9 5-16 5-6 0-11-3-16-6-5 6-13 9-21 9z" fill="#B98C6E"/>
+          <circle cx="68" cy="37" r="19" fill="#C79A79"/>
+          <ellipse cx="54" cy="43" rx="11" ry="9" fill="#E3C3A4"/>
+          <ellipse cx="45" cy="40" rx="4" ry="3.2" fill="#4A342A"/>
+          <circle cx="61" cy="30" r="3.6" fill="#3B2A22"/>
+          <circle cx="75" cy="31" r="3.6" fill="#3B2A22"/>
+          <circle cx="62" cy="28.7" r="1.3" fill="#fff"/>
+          <circle cx="76" cy="29.7" r="1.3" fill="#fff"/>
+        </g>
+        <g class="cat">
+          <path d="M156 46c-3-8-2-14 1-15 3-1 7 3 9 10z" fill="#EFA76B"/>
+          <path d="M180 45c4-7 9-10 12-8 3 2 2 8-2 14z" fill="#EFA76B"/>
+          <path d="M168 82c-17 0-27-9-27-23 0-15 11-25 27-25s27 10 27 25c0 14-10 23-27 23z" fill="#EFA76B"/>
+          <path d="M168 82c-9 0-15-5-15-13 0-9 6-15 15-15s15 6 15 15c0 8-6 13-15 13z" fill="#FBE0CB"/>
+          <circle cx="168" cy="40" r="21" fill="#EFA76B"/>
+          <ellipse cx="168" cy="46" rx="9" ry="7" fill="#FBE0CB"/>
+          <ellipse cx="161" cy="37" rx="3.1" ry="3.7" fill="#3B2A22"/>
+          <ellipse cx="177" cy="37" rx="3.1" ry="3.7" fill="#3B2A22"/>
+          <path d="M168 43l-3 2 3 2 3-2z" fill="#E77D8E"/>
+          <path d="M194 72c10-2 17-10 15-19" fill="none" stroke="#EFA76B" stroke-width="8" stroke-linecap="round"/>
+        </g>
+        <g class="hearts">
+          <path class="h1" d="M114 24c0-5 7-7 9-2 2-5 9-3 9 2 0 6-9 12-9 12s-9-6-9-12z" fill="#F08CA0"/>
+        </g>
+      </svg>
+    </div>
+    <!-- ЗАМЕНИ: нижняя строчка -->
+    <p>Sending you a digital hug 💙 mwah🤍</p>
+  </footer>
+
+</div>
+
+
+
 </body>
 </html>

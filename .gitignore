@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# резервные копии, сделанные по ходу работы — нужны только локально
+.index-backup*.html
+.styles-backup*.css
+index-previous.html
+_test.html
