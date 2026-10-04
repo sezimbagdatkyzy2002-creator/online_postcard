@@ -13,6 +13,9 @@
   --sea:        #6E93A8;
   --sea-soft:   #E6F1F6;
   --line:       #EFE1D4;
+  --gold:       #F2C46D;   /* праздничный золотой */
+  --gold-soft:  #FFF1CF;
+  --autumn-soft: #FBE3C7;  /* тёплое осеннее сияние на фоне */
   --shadow:     0 10px 30px rgba(120, 90, 70, .10);
 
   /* Рукописный шрифт. Caveat грузится из интернета и поддерживает кириллицу.
@@ -25,7 +28,7 @@
 body {
   background:
     radial-gradient(circle at 12% 8%,  var(--rose-soft) 0%, transparent 42%),
-    radial-gradient(circle at 88% 22%, var(--sea-soft)  0%, transparent 40%),
+    radial-gradient(circle at 88% 22%, var(--autumn-soft) 0%, transparent 40%),
     radial-gradient(circle at 50% 100%, #FDF0E3 0%, transparent 55%),
     var(--cream);
   background-attachment: fixed;
@@ -55,7 +58,7 @@ body {
 
 .hero h1 {
   font-family: var(--hand-font);
-  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  font-size: clamp(2.0rem, 6vw, 3.6rem);
   font-weight: 700;
   line-height: 1.15;
   color: var(--rose);
@@ -344,3 +347,181 @@ footer {
 @media (hover: none) {
   .photo__caption { opacity: 1; }
 }
+
+
+/* ======================= ПРАЗДНИЧНЫЙ ДЕНЬ 🎉 =======================
+   Всё ниже работает только в праздничный день (PARTY_DATE в index.html).
+   В остальные дни этих украшений просто нет. */
+
+.party-only { display: none; }
+html.party .party-only { display: revert; }
+
+/* тёплое золотое сияние сверху */
+html.party body {
+  background:
+    radial-gradient(circle at 50% 0%,   var(--gold-soft) 0%, transparent 38%),
+    radial-gradient(circle at 12% 8%,   var(--rose-soft) 0%, transparent 42%),
+    radial-gradient(circle at 88% 22%,  var(--autumn-soft) 0%, transparent 40%),
+    radial-gradient(circle at 50% 100%, #FDF0E3 0%, transparent 55%),
+    var(--cream);
+  background-attachment: fixed;
+}
+
+html.party .hero { padding-top: 10px; }
+
+/* флажки */
+.bunting { max-width: 620px; margin: 0 auto 4px; }
+.bunting svg { width: 100%; height: auto; display: block; overflow: visible; }
+.bunting .flag {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: flutter 2.8s ease-in-out infinite;
+}
+.bunting .flag:nth-of-type(odd) { animation-delay: -1.4s; }
+
+/* надпись «Сегодня ровно ...» */
+html.party .party-banner {
+  display: inline-block;
+  font-size: clamp(1.4rem, 4.4vw, 2rem);
+  line-height: 1.3;
+  text-wrap: balance;   /* на телефоне делит строчки поровну, чтобы 🎉 не осталась одна */
+  color: var(--rose);
+  padding: 0 8px;
+  margin: 2px 0 8px;
+  animation: wiggle 3.2s ease-in-out infinite;
+}
+
+/* котика с морским львом можно нажать — будет ещё конфетти */
+html.party .hero__art { cursor: pointer; }
+
+html.party .letter__pin {
+  background: var(--gold);
+  box-shadow: 0 3px 8px rgba(242, 196, 109, .55), inset 0 -3px 5px rgba(0,0,0,.12);
+}
+
+/* конфетти (кусочки создаёт скрипт в index.html) */
+.confetti {
+  position: fixed;
+  top: -26px;
+  z-index: 50;
+  width: 8px;
+  height: 13px;
+  border-radius: 2px;
+  pointer-events: none;
+  font-style: normal;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+.confetti--dot   { width: 9px; height: 9px; border-radius: 50%; }
+.confetti--heart { width: auto; height: auto; font-size: 18px; line-height: 1; }
+
+@keyframes confetti-fall {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate3d(var(--drift, 0px), 108vh, 0) rotate(var(--spin, 360deg)); opacity: 0; }
+}
+@keyframes flutter { 0%,100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes wiggle  { 0%,100% { transform: rotate(-2deg) scale(1); }
+                     50%     { transform: rotate(-2deg) scale(1.05); } }
+
+
+/* ============================ ОСЕНЬ 🍂 ============================ */
+
+/* вся открытка лежит поверх листопада */
+.page { position: relative; z-index: 1; }
+
+/* листопад на фоне (листики создаёт скрипт в index.html) */
+.leaves {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.leaf {
+  position: absolute;
+  top: -50px;
+  animation: leaf-fall linear infinite;
+}
+.leaf svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: .85;
+  animation: leaf-sway ease-in-out infinite alternate;
+}
+@keyframes leaf-fall { from { transform: translateY(0); }
+                       to   { transform: translateY(calc(100vh + 100px)); } }
+@keyframes leaf-sway { from { transform: translateX(-28px) rotate(-35deg); }
+                       to   { transform: translateX(28px)  rotate(40deg); } }
+
+/* листики в уголке письма */
+.letter__leaves {
+  position: absolute;
+  top: -22px;
+  right: 22px;
+  width: 92px;
+  height: auto;
+}
+
+/* тыковка тихонько покачивается */
+.pumpkin { animation: sway 4.8s ease-in-out infinite; transform-origin: 245px 194px; }
+
+
+/* ============================== ВИДЕО ============================== */
+
+/* в блоке с видео текст сверху, видео под ним на всю ширину */
+.block--video {
+  flex-direction: column;
+  text-align: center;
+  gap: 18px;
+}
+.block--video .block__text { flex: none; }
+
+.video {
+  width: 100%;
+  max-width: 760px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #F4EBE2;
+  box-shadow: 0 0 0 2px #E7D7C7;
+}
+.video video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;    /* вертикальное видео не станет выше экрана */
+  background: #F4EBE2;
+}
+
+/* заставка перед видео */
+.video { position: relative; }
+.video__cover {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: #F3E5D2;
+  cursor: pointer;
+  transition: opacity .35s ease;
+}
+.video__cover svg { display: block; width: 100%; height: 100%; }
+.video__cover:focus-visible { outline: 3px solid var(--rose); outline-offset: -3px; }
+.video.is-playing .video__cover { opacity: 0; pointer-events: none; }
+
+/* еда на заставке покачивается, кнопка «play» дышит */
+.video__cover .food { animation: bob 3.2s ease-in-out infinite; }
+.video__cover .video__play {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes bob     { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes breathe { 0%,100% { transform: scale(1); }      50% { transform: scale(1.07); } }
+
+
+/* облачко с мыслями котика тихонько покачивается */
+.thought { animation: thought 4.5s ease-in-out infinite; }
+@keyframes thought { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
